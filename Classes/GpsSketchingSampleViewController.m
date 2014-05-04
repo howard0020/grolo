@@ -36,6 +36,7 @@
 
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *startStopButton;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *addCurrentLocButton;
+@property (nonatomic, strong) IBOutlet UILabel *infoLabel;
 
 @property (nonatomic, strong) Parameters *parameters;
 
@@ -48,6 +49,10 @@
 
 @property (nonatomic, strong) NSString *myID;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *lockButton;
+
+@property (nonatomic, strong) NSDictionary *colorsDict;
+@property (nonatomic, strong) AGSRouteTask* routeTask;
+@property (nonatomic, strong) AGSRouteTaskParameters *routeTaskParams;
 
 @property (nonatomic) BOOL lock;
 
@@ -93,6 +98,17 @@
     self.lock = NO;
     [self lock:nil];
     
+    self.colorsDict = @{ @"black"  : [UIColor blackColor],
+                     @"red" : [UIColor redColor],
+                     @"yellow": [UIColor yellowColor],
+                     @"green": [UIColor greenColor]};
+    
+//    NSURL* routeURL = [NSURL URLWithString: @"http://tasks.arcgisonline.com/ArcGIS/rest/services/NetworkAnalysis/ESRI_Route_NA/NAServer/Route"];
+//    self.routeTask = [[AGSRouteTask alloc] initWithURL: routeURL];
+//
+//    self.routeTask.delegate = self;
+//    [self.routeTask retrieveDefaultRouteTaskParameters];
+//    
     NSString *url = [NSString stringWithFormat:@"https://grolo.firebaseio.com/trips/%d/users/%@", self.currentGroupId, self.myID];
     self.myLocationRef = [[Firebase alloc] initWithUrl:url];
     self.geometryDict = [NSMutableDictionary dictionary];
@@ -140,9 +156,19 @@
         NSDictionary *userLocation = [user objectForKey:@"location"];
         AGSPoint* point = [[AGSPoint alloc] init];
         [point decodeWithJSON: userLocation];
-                
-        AGSGeometry *geometry = point;
+        
+        
+        //distance
+        double distance = [[self.mapView.locationDisplay mapLocation] distanceToPoint:point];
+        double km = [[point spatialReference] convertValue:distance toUnit:AGSSRUnitKilometer];
+        NSLog(@"%f km",km);
+        
         AGSSymbol *symbol = [weakSelf.mapView.locationDisplay defaultSymbol];
+       
+        if([user objectForKey:@"color"]) {
+            symbol = [self symbolWithColor: [self.colorsDict objectForKey:[user objectForKey:@"color"]]];
+        }
+        AGSGeometry *geometry = point;
         AGSGraphic *graphic = [AGSGraphic graphicWithGeometry:geometry
                                                        symbol:symbol
                                                    attributes:nil];
@@ -172,6 +198,12 @@
         NSDictionary *userLocation = [user objectForKey:@"location"];
         AGSGraphic *graphic = [weakSelf.userIdToGraphicDict valueForKey:userID];
         AGSPoint *point = (AGSPoint *) graphic.geometry;
+        
+        //distance
+        double distance = [[self.mapView.locationDisplay mapLocation] distanceToPoint:point];
+        NSLog(@"%f",distance);
+        
+        
         [point decodeWithJSON: userLocation];
         [weakSelf.otherUserLayer removeGraphic:graphic];
         [weakSelf.otherUserLayer addGraphic:graphic];
@@ -179,6 +211,12 @@
         [self zoomToGroup];
     }];
 
+}
+
+- (void)routeTask:(AGSRouteTask*)routeTask operation:(NSOperation*)op didRetrieveDefaultRouteTaskParameters:(AGSRouteTaskParameters*)routeParams
+{
+    NSLog(@"%@",routeParams);
+    self.routeTaskParams = routeParams;
 }
 
 - (IBAction)lock:(id)sender
@@ -204,7 +242,7 @@
     }
 }
 
-- (AGSCompositeSymbol*)greenSymbolWithNumber:(NSInteger)stopNumber {
+- (AGSCompositeSymbol*)symbolWithColor:(UIColor*)color {
 	AGSCompositeSymbol *cs = [AGSCompositeSymbol compositeSymbol];
 	
     // create outline
@@ -215,7 +253,7 @@
 	
     // create main circle
 	AGSSimpleMarkerSymbol *sms = [AGSSimpleMarkerSymbol simpleMarkerSymbol];
-	sms.color = [UIColor greenColor];
+	sms.color = color;
 	sms.outline = sls;
 	sms.size = CGSizeMake(10, 10);
 	sms.style = AGSSimpleMarkerSymbolStyleCircle;
@@ -359,6 +397,17 @@
 
 //    NSLog(@"%@",[self.mapView.locationDisplay mapLocation]);
     AGSPoint *point = [self.mapView.locationDisplay mapLocation];
+    __block NSString * string = @"";
+    [self.userIdToGraphicDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        AGSGraphic* graphic = (AGSGraphic*)obj;
+        double distance = [point distanceToPoint:(AGSPoint*)[graphic geometry]];
+        double km = [[point spatialReference] convertValue:distance toUnit:AGSSRUnitFoot];
+//        string = [[string stringByAppendingString:@"User"] stringByAppendingString:key];
+        string = [NSString stringWithFormat:@"%@ User %@: %f ft.", string, key, km];
+    }];
+    
+    self.infoLabel.text = string;
+    
     
     [[self.myLocationRef childByAppendingPath:@"location"] setValue:[point encodeToJSON]];
     if(point) {
