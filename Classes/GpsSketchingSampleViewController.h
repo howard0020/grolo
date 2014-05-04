@@ -14,7 +14,7 @@
 #import <UIKit/UIKit.h>
 #import <ArcGIS/ArcGIS.h>
 #import "SettingsViewController.h"
-
+#import <Firebase/Firebase.h>
 
 @interface GpsSketchingSampleViewController : UIViewController <AGSMapViewLayerDelegate, CLLocationManagerDelegate>
 

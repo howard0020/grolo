@@ -12,6 +12,12 @@
 		28D7ACF80DDB3853001CB0EB /* GpsSketchingSampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* GpsSketchingSampleViewController.m */; };
 		3EE6BBEA18E0A0CA0092054A /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EE6BBE918E0A0CA0092054A /* Storyboard.storyboard */; };
 		3EE6BBEE18E0ACD20092054A /* Parameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EE6BBED18E0ACD20092054A /* Parameters.m */; };
+		896E8B581915D0AF00CFFB2A /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896E8B571915D0AF00CFFB2A /* Firebase.framework */; };
+		896E8B5A1915D0D500CFFB2A /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 896E8B591915D0D500CFFB2A /* libicucore.dylib */; };
+		896E8B5C1915D0DE00CFFB2A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 896E8B5B1915D0DE00CFFB2A /* libc++.dylib */; };
+		896E8B5E1915D0E800CFFB2A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896E8B5D1915D0E800CFFB2A /* CFNetwork.framework */; };
+		896E8B601915D0F100CFFB2A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896E8B5F1915D0F100CFFB2A /* Security.framework */; };
+		896E8B621915D0FA00CFFB2A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896E8B611915D0FA00CFFB2A /* SystemConfiguration.framework */; };
 		9704D4B8142AC69A00C7D727 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9704D4B6142AC69A00C7D727 /* icon@2x.png */; };
 		9704D4B9142AC69A00C7D727 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9704D4B7142AC69A00C7D727 /* icon.png */; };
 		97B8C37C1677CBB8003B6E1B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97B8C37B1677CBB8003B6E1B /* Default-568h@2x.png */; };
@@ -32,6 +38,12 @@
 		3EE6BBE918E0A0CA0092054A /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
 		3EE6BBEC18E0ACD20092054A /* Parameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Parameters.h; path = Models/Parameters.h; sourceTree = "<group>"; };
 		3EE6BBED18E0ACD20092054A /* Parameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Parameters.m; path = Models/Parameters.m; sourceTree = "<group>"; };
+		896E8B571915D0AF00CFFB2A /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Firebase.framework; sourceTree = "<group>"; };
+		896E8B591915D0D500CFFB2A /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		896E8B5B1915D0DE00CFFB2A /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		896E8B5D1915D0E800CFFB2A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		896E8B5F1915D0F100CFFB2A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		896E8B611915D0FA00CFFB2A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* GpsSketchingSample-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GpsSketchingSample-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		9704D4B6142AC69A00C7D727 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
 		9704D4B7142AC69A00C7D727 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
@@ -48,6 +60,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				896E8B621915D0FA00CFFB2A /* SystemConfiguration.framework in Frameworks */,
+				896E8B601915D0F100CFFB2A /* Security.framework in Frameworks */,
+				896E8B5E1915D0E800CFFB2A /* CFNetwork.framework in Frameworks */,
+				896E8B5C1915D0DE00CFFB2A /* libc++.dylib in Frameworks */,
+				896E8B5A1915D0D500CFFB2A /* libicucore.dylib in Frameworks */,
+				896E8B581915D0AF00CFFB2A /* Firebase.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +129,12 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				896E8B611915D0FA00CFFB2A /* SystemConfiguration.framework */,
+				896E8B5F1915D0F100CFFB2A /* Security.framework */,
+				896E8B5D1915D0E800CFFB2A /* CFNetwork.framework */,
+				896E8B5B1915D0DE00CFFB2A /* libc++.dylib */,
+				896E8B591915D0D500CFFB2A /* libicucore.dylib */,
+				896E8B571915D0AF00CFFB2A /* Firebase.framework */,
 				C5F53D4414EC5C9500360A58 /* ArcGIS.bundle */,
 			);
 			name = Frameworks;
@@ -222,7 +246,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(HOME)/Library/SDKs/ArcGIS/iOS/**";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(HOME)/Library/SDKs/ArcGIS/iOS/**",
+					"$(PROJECT_DIR)",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -253,7 +280,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(HOME)/Library/SDKs/ArcGIS/iOS/**";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(HOME)/Library/SDKs/ArcGIS/iOS/**",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = GpsSketchingSample_Prefix.pch;
 				INFOPLIST_FILE = "GpsSketchingSample-Info.plist";
