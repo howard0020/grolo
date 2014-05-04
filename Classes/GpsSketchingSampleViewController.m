@@ -33,6 +33,8 @@
 
 @property (nonatomic, strong) Parameters *parameters;
 
+@property (nonatomic, strong)Firebase* myLocationRef;
+
 //starts the sketching of location updates
 - (IBAction)startGPSSketching:(id)sender;
 
@@ -61,6 +63,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.myLocationRef = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/users/2"];
+    
+    
 	
     //initialize the map URL and the tiled map layer. 
 	NSURL *mapUrl = [NSURL URLWithString:kBaseMapURL];
@@ -215,7 +221,10 @@
     //add the present gps point to the sketch layer. Notice that we do not have to reproject this point as the mapview's gps object is returing the point in the same spatial reference. 
     //index -1 forces the vertex to be added at the end
     [self.gpsSketchLayer insertVertex:[self.mapView.locationDisplay mapLocation] inPart:0 atIndex:-1];
-    
+    NSLog(@"%@",[self.mapView.locationDisplay mapLocation]);
+    double x = [[self.mapView.locationDisplay mapLocation] x];
+    double y = [[self.mapView.locationDisplay mapLocation] x];
+    [[self.myLocationRef childByAppendingPath:@"location"] setValue:@{@"x": @(x), @"y": @(y)}];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
