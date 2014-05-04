@@ -28,6 +28,7 @@
 
 //the sketch layer used to draw the gps track
 @property (nonatomic, strong) AGSSketchGraphicsLayer *gpsSketchLayer;
+@property (nonatomic, strong) AGSGraphicsLayer *otherUserLayer;
 
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *startStopButton;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *addCurrentLocButton;
@@ -35,6 +36,8 @@
 @property (nonatomic, strong) Parameters *parameters;
 
 @property (nonatomic, strong)Firebase* myLocationRef;
+
+@property (nonatomic, strong) NSMutableDictionary *geometryDict;
 
 //starts the sketching of location updates
 - (IBAction)startGPSSketching:(id)sender;
@@ -65,7 +68,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.myLocationRef = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips/1/users/2"];
+    self.geometryDict = [NSMutableDictionary dictionary];
+    
+    self.myLocationRef = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips/1/users/3"];
     
     //initialize the map URL and the tiled map layer.
 	NSURL *mapUrl = [NSURL URLWithString:kBaseMapURL];
@@ -79,7 +84,10 @@
     
     //preparing the gps sketch layer. 
     self.gpsSketchLayer = [[AGSSketchGraphicsLayer alloc] initWithGeometry:nil];
+    self.otherUserLayer = [[AGSGraphicsLayer alloc] init];
+    
 	[self.mapView addMapLayer:self.gpsSketchLayer withName:@"Sketch layer"];
+    [self.mapView addMapLayer:self.otherUserLayer withName:@"Other Layer"];
     
     //this button is enabled only when the trackin has started. 
     self.addCurrentLocButton.enabled = NO;
@@ -96,17 +104,29 @@
     Firebase* user1 = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips/1/users/1/location"];
     [user1 observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
 
+        [self.otherUserLayer removeAllGraphics];
+        
         AGSPoint* point = [[AGSPoint alloc] init];
         [point decodeWithJSON:snapshot.value];
         AGSGeometry *geometry = point;
         AGSSymbol *symbol = [self.mapView.locationDisplay courseSymbol];
+        
         AGSGraphic *graphic = [AGSGraphic graphicWithGeometry:geometry
                                                                    symbol:symbol
                                                                attributes:nil];
         
-        [self.gpsSketchLayer addGraphic:graphic];
+        [self.otherUserLayer addGraphic:graphic];
+        
+        [self.geometryDict setObject:geometry forKey:@"1"];
+//        [self zoomToGroup];
     }];
 
+}
+
+- (void)zoomToGroup
+{
+    AGSGeometry *unionGeometry = [[AGSGeometryEngine defaultGeometryEngine] unionGeometries:self.geometryDict.allValues];
+    [self.mapView zoomToGeometry:unionGeometry withPadding:100.0f animated:YES];
 }
 
 - (AGSCompositeSymbol*)greenSymbolWithNumber:(NSInteger)stopNumber {
@@ -249,16 +269,26 @@
  *      accuracy, or both together.
  */
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
+    
+    
     // test that the horizontal accuracy does not indicate an invalid measurement
     if (newLocation.horizontalAccuracy < 0) return;    
     
     //add the present gps point to the sketch layer. Notice that we do not have to reproject this point as the mapview's gps object is returing the point in the same spatial reference. 
     //index -1 forces the vertex to be added at the end
     
+    [self.gpsSketchLayer clear];
+    
     [self.gpsSketchLayer insertVertex:[self.mapView.locationDisplay mapLocation] inPart:0 atIndex:-1];
 
 //    NSLog(@"%@",[self.mapView.locationDisplay mapLocation]);
-    [[self.myLocationRef childByAppendingPath:@"location"] setValue:[[self.mapView.locationDisplay mapLocation] encodeToJSON]];
+    AGSPoint *point = [self.mapView.locationDisplay mapLocation];
+    
+    [[self.myLocationRef childByAppendingPath:@"location"] setValue:[point encodeToJSON]];
+    
+    [self.geometryDict setObject:point forKey:@"3"];
+    
+    [self zoomToGroup];
 //    
 //    [[self.myLocationRef childByAppendingPath:@"symbol"] setValue:[self.mapView.locationDisplay location]];
 //    
