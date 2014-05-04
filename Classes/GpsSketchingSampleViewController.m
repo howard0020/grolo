@@ -43,6 +43,9 @@
 @property (nonatomic, strong) NSMutableDictionary *geometryDict;
 
 @property (nonatomic, strong) NSString *myID;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *lockButton;
+
+@property (nonatomic) BOOL lock;
 
 //starts the sketching of location updates
 - (IBAction)startGPSSketching:(id)sender;
@@ -64,7 +67,7 @@
 
 #pragma mark - UIViewController methods
 - (NSString *) myID {
-    return @"2";
+    return @"3";
 }
 
 - (NSMutableDictionary *) userIdToGraphicDict {
@@ -82,6 +85,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.lock = NO;
+    self.lockButton.title = @"Lock";
     
     NSString *url = [NSString stringWithFormat:@"https://grolo.firebaseio.com/trips/%d/users/%@", self.currentGroupId, self.myID];
     self.myLocationRef = [[Firebase alloc] initWithUrl:url];
@@ -169,10 +175,19 @@
 
 }
 
+- (IBAction)lock:(id)sender
+{
+    self.lock = !self.lock;
+    self.lockButton.title = self.lock? @"Unlock" : @"Lock";
+}
+
 - (void)zoomToGroup
 {
-    AGSGeometry *unionGeometry = [[AGSGeometryEngine defaultGeometryEngine] unionGeometries:self.geometryDict.allValues];
-    [self.mapView zoomToGeometry:unionGeometry withPadding:100.0f animated:YES];
+    if (self.lock)
+    {
+        AGSGeometry *unionGeometry = [[AGSGeometryEngine defaultGeometryEngine] unionGeometries:self.geometryDict.allValues];
+        [self.mapView zoomToGeometry:unionGeometry withPadding:100.0f animated:YES];
+    }
 }
 
 - (AGSCompositeSymbol*)greenSymbolWithNumber:(NSInteger)stopNumber {
@@ -215,6 +230,12 @@
     self.gpsSketchLayer = nil;
     self.startStopButton = nil;
     self.addCurrentLocButton = nil;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self stopGPSSketching];
 }
 
 #pragma mark - 
@@ -282,10 +303,6 @@
     //start the location maneger. 
     [self.locationManager startUpdatingLocation];
     
-    //set the title of the button to Stop and change the selector on it. 
-    self.startStopButton.title = @"Stop";  
-    [self.startStopButton setAction:@selector(stopGPSSketching)];
-    
     //by enabling this, the user can now add their prest location as a vertex to the path.
     self.addCurrentLocButton.enabled = YES;
    
@@ -302,10 +319,6 @@
     
     //disable the button for adding current location as vertex. 
     self.addCurrentLocButton.enabled = NO;
-    
-    //change the selector on the start stop button back to "startGPSSketching"
-    [self.startStopButton setAction:@selector(startGPSSketching:)];
-    
 }
 
 
