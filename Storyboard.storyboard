@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="uZe-Nx-dAE">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="uZe-Nx-dAE">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <scenes>
         <!--Gps Sketching Sample View Controller - Grolo-->
@@ -21,15 +21,21 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VTE-w5-Tp3">
-                                        <rect key="frame" x="69" y="70" width="251" height="32"/>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VTE-w5-Tp3">
+                                        <rect key="frame" x="0.0" y="65" width="320" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.31" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.75" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="VTE-w5-Tp3" secondAttribute="trailing" id="bYS-EW-Zkq"/>
+                                    <constraint firstItem="VTE-w5-Tp3" firstAttribute="leading" secondItem="3MG-ug-29D" secondAttribute="leading" id="hTX-Qp-Cka"/>
+                                    <constraint firstItem="VTE-w5-Tp3" firstAttribute="top" secondItem="3MG-ug-29D" secondAttribute="top" constant="65" id="lYl-7f-diE"/>
+                                </constraints>
                                 <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                             </view>
                             <imageView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" image="ArcGIS.bundle/esri.png" translatesAutoresizingMaskIntoConstraints="NO" id="R6h-wd-Arj">
@@ -201,7 +207,7 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="8yj-VC-ble">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="8yj-VC-ble">
                                 <rect key="frame" x="28" y="345" width="272" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <constraints>
@@ -219,7 +225,7 @@
                                     <action selector="controlChanged:" destination="MDh-P7-jFb" eventType="valueChanged" id="zUA-tj-1KH"/>
                                 </connections>
                             </segmentedControl>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" ambiguous="YES" misplaced="YES" text="My Color" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="9sP-cS-SRy">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="My Color" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="9sP-cS-SRy">
                                 <rect key="frame" x="28" y="316" width="70" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
@@ -233,8 +239,10 @@
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="9sP-cS-SRy" firstAttribute="leading" secondItem="efb-x1-XMI" secondAttribute="leading" id="4II-pX-Oup"/>
                             <constraint firstItem="xom-vi-6Jb" firstAttribute="top" secondItem="xcB-sS-iYk" secondAttribute="top" id="8uJ-dA-lg6"/>
                             <constraint firstItem="xom-vi-6Jb" firstAttribute="leading" secondItem="xcB-sS-iYk" secondAttribute="leading" id="Bf8-WS-VZd"/>
+                            <constraint firstItem="9sP-cS-SRy" firstAttribute="top" secondItem="hhZ-I7-y1q" secondAttribute="bottom" constant="29" id="Fwx-T1-Nlf"/>
                             <constraint firstAttribute="centerX" secondItem="efb-x1-XMI" secondAttribute="centerX" constant="-4" id="Kkd-UY-qSa"/>
                             <constraint firstAttribute="trailing" secondItem="xom-vi-6Jb" secondAttribute="trailing" id="Q5r-Ss-cYf"/>
                             <constraint firstAttribute="centerX" secondItem="hhZ-I7-y1q" secondAttribute="centerX" id="QQ3-sx-vBU"/>
@@ -244,9 +252,11 @@
                             <constraint firstItem="hhZ-I7-y1q" firstAttribute="top" secondItem="efb-x1-XMI" secondAttribute="bottom" constant="3" id="gQZ-qc-aQk"/>
                             <constraint firstItem="Bfc-hu-CgC" firstAttribute="top" secondItem="xom-vi-6Jb" secondAttribute="bottom" constant="15" id="hV3-Gd-EBC"/>
                             <constraint firstItem="efb-x1-XMI" firstAttribute="top" secondItem="8Cy-HH-Tac" secondAttribute="bottom" constant="8" id="kL0-CE-GIO"/>
+                            <constraint firstItem="9sP-cS-SRy" firstAttribute="leading" secondItem="8yj-VC-ble" secondAttribute="leading" id="mz4-vW-mMC"/>
                             <constraint firstAttribute="centerX" secondItem="iHM-EW-5rq" secondAttribute="centerX" id="rNc-Wc-TqS"/>
                             <constraint firstItem="8Cy-HH-Tac" firstAttribute="top" secondItem="iHM-EW-5rq" secondAttribute="bottom" constant="29" id="sQq-Z9-npP"/>
                             <constraint firstItem="iHM-EW-5rq" firstAttribute="top" secondItem="Aly-ww-fnf" secondAttribute="bottom" constant="-1" id="t2U-Hm-U7a"/>
+                            <constraint firstItem="8yj-VC-ble" firstAttribute="top" secondItem="9sP-cS-SRy" secondAttribute="bottom" constant="8" symbolic="YES" id="tsG-7O-Tqa"/>
                             <constraint firstItem="Bfc-hu-CgC" firstAttribute="leading" secondItem="Aly-ww-fnf" secondAttribute="leading" id="uLv-FB-6ux"/>
                         </constraints>
                         <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

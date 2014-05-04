@@ -177,6 +177,8 @@
         [weakSelf.otherUserLayer addGraphic:graphic];
         
         [self.geometryDict setObject:geometry forKey:userID];
+        
+        [self setDistance];
     }];
     
     [users observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
@@ -185,6 +187,8 @@
         AGSGraphic *graphic = [weakSelf.userIdToGraphicDict valueForKey:userID];
         [weakSelf.userIdToGraphicDict removeObjectForKey:userID];
         [weakSelf.gpsSketchLayer removeGraphic:graphic];
+        
+        [self setDistance];
     }];
     
     [users observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
@@ -209,6 +213,7 @@
         [weakSelf.otherUserLayer addGraphic:graphic];
         
         [self zoomToGroup];
+        [self setDistance];
     }];
 
 }
@@ -397,17 +402,8 @@
 
 //    NSLog(@"%@",[self.mapView.locationDisplay mapLocation]);
     AGSPoint *point = [self.mapView.locationDisplay mapLocation];
-    __block NSString * string = @"";
-    [self.userIdToGraphicDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        AGSGraphic* graphic = (AGSGraphic*)obj;
-        double distance = [point distanceToPoint:(AGSPoint*)[graphic geometry]];
-        double km = [[point spatialReference] convertValue:distance toUnit:AGSSRUnitFoot];
-//        string = [[string stringByAppendingString:@"User"] stringByAppendingString:key];
-        string = [NSString stringWithFormat:@"%@ User %@: %f ft.", string, key, km];
-    }];
     
-    self.infoLabel.text = string;
-    
+    [self setDistance];
     
     [[self.myLocationRef childByAppendingPath:@"location"] setValue:[point encodeToJSON]];
     if(point) {
@@ -420,6 +416,22 @@
 //    [[self.myLocationRef childByAppendingPath:@"symbol"] setValue:[self.mapView.locationDisplay location]];
 //    
 //    NSLog(@"%@",[self.mapView.locationDisplay courseSymbol]);
+}
+
+- (void) setDistance
+{
+    AGSPoint *point = [self.mapView.locationDisplay mapLocation];
+    __block NSString * string = @"";
+    [self.userIdToGraphicDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        AGSGraphic* graphic = (AGSGraphic*)obj;
+        double distance = [point distanceToPoint:(AGSPoint*)[graphic geometry]];
+        double km = [[point spatialReference] convertValue:distance toUnit:AGSSRUnitFoot];
+        //        string = [[string stringByAppendingString:@"User"] stringByAppendingString:key];
+        string = [NSString stringWithFormat:@"%@ User %@: %.02f ft.", string, key, km];
+    }];
+    
+    self.infoLabel.text = string;
+    [self.view layoutIfNeeded];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
