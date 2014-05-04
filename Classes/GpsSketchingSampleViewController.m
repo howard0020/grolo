@@ -64,7 +64,7 @@
 
 #pragma mark - UIViewController methods
 - (NSString *) myID {
-    return @"1";
+    return @"2";
 }
 
 - (NSMutableDictionary *) userIdToGraphicDict {
@@ -138,7 +138,9 @@
                                                    attributes:nil];
         
         [weakSelf.userIdToGraphicDict setValue:graphic forKey:userID];
-        [weakSelf.gpsSketchLayer addGraphic:graphic];
+        [weakSelf.otherUserLayer addGraphic:graphic];
+        
+        [self.geometryDict setObject:geometry forKey:userID];
     }];
     
     [users observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
@@ -161,27 +163,27 @@
         AGSGraphic *graphic = [weakSelf.userIdToGraphicDict valueForKey:userID];
         AGSPoint *point = (AGSPoint *) graphic.geometry;
         [point decodeWithJSON: userLocation];
-        [weakSelf.gpsSketchLayer removeGraphic:graphic];
-        [weakSelf.gpsSketchLayer addGraphic:graphic];
+        [weakSelf.otherUserLayer removeGraphic:graphic];
+        [weakSelf.otherUserLayer addGraphic:graphic];
     }];
     
-    Firebase* user1 = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips/1/users/3/location"];
-    [user1 observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        [self.otherUserLayer removeAllGraphics];
-        
-        AGSPoint* point = [[AGSPoint alloc] init];
-        [point decodeWithJSON:snapshot.value];
-        AGSGeometry *geometry = point;
-        AGSSymbol *symbol = [self.mapView.locationDisplay courseSymbol];
-        
-        AGSGraphic *graphic = [AGSGraphic graphicWithGeometry:geometry
-                                                       symbol:symbol
-                                                   attributes:nil];
-        
-        [self.otherUserLayer addGraphic:graphic];
-        [self.geometryDict setObject:geometry forKey:@"1"];
-        //        [self zoomToGroup];
-    }];
+//    Firebase* user1 = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips/1/users/3/location"];
+//    [user1 observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+//        [self.otherUserLayer removeAllGraphics];
+//        
+//        AGSPoint* point = [[AGSPoint alloc] init];
+//        [point decodeWithJSON:snapshot.value];
+//        AGSGeometry *geometry = point;
+//        AGSSymbol *symbol = [self.mapView.locationDisplay courseSymbol];
+//        
+//        AGSGraphic *graphic = [AGSGraphic graphicWithGeometry:geometry
+//                                                       symbol:symbol
+//                                                   attributes:nil];
+//        
+//        [self.otherUserLayer addGraphic:graphic];
+//        [self.geometryDict setObject:geometry forKey:@"1"];
+//        //        [self zoomToGroup];
+//    }];
 }
 
 - (void)zoomToGroup
@@ -348,7 +350,7 @@
     
     [[self.myLocationRef childByAppendingPath:@"location"] setValue:[point encodeToJSON]];
     
-    [self.geometryDict setObject:point forKey:@"3"];
+    [self.geometryDict setObject:point forKey:self.myID];
     
     [self zoomToGroup];
 //    
