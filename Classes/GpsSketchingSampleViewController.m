@@ -91,16 +91,11 @@
     [super viewDidLoad];
     
     self.lock = NO;
-    self.lockButton.title = @"Lock";
+    [self lock:nil];
     
     NSString *url = [NSString stringWithFormat:@"https://grolo.firebaseio.com/trips/%d/users/%@", self.currentGroupId, self.myID];
     self.myLocationRef = [[Firebase alloc] initWithUrl:url];
     self.geometryDict = [NSMutableDictionary dictionary];
-    
-    
-//    self.webMap = [AGSWebMap webMapWithItemId:kWebmapID credential:nil];
-//    [self.webMap openIntoMapView:self.mapView];
-//    self.webMap.delegate = self;
     
     //initialize the map URL and the tiled map layer.
 	NSURL *mapUrl = [NSURL URLWithString:kBaseMapURL];
@@ -180,6 +175,8 @@
         [point decodeWithJSON: userLocation];
         [weakSelf.otherUserLayer removeGraphic:graphic];
         [weakSelf.otherUserLayer addGraphic:graphic];
+        
+        [self zoomToGroup];
     }];
 
 }
@@ -188,6 +185,10 @@
 {
     self.lock = !self.lock;
     self.lockButton.title = self.lock? @"Unlock" : @"Lock";
+    if (!self.lock)
+    {
+        [self showCurrentLocation];
+    }
 }
 
 - (void)zoomToGroup
