@@ -23,6 +23,7 @@
 		9704D4B9142AC69A00C7D727 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9704D4B7142AC69A00C7D727 /* icon.png */; };
 		97B8C37C1677CBB8003B6E1B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97B8C37B1677CBB8003B6E1B /* Default-568h@2x.png */; };
 		97D382ED142D3DFF006372FD /* northarrow.gif in Resources */ = {isa = PBXBuildFile; fileRef = 97D382EC142D3DFF006372FD /* northarrow.gif */; };
+		9DE7BF8A1916038500422862 /* GroupListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DE7BF891916038500422862 /* GroupListViewController.m */; };
 		C55320D914885972008EA256 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C55320D714885972008EA256 /* SettingsViewController.m */; };
 		C5F3C643149FEB3A009C00C2 /* bullseye.png in Resources */ = {isa = PBXBuildFile; fileRef = C5F3C642149FEB3A009C00C2 /* bullseye.png */; };
 		C5F53D4514EC5C9500360A58 /* ArcGIS.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C5F53D4414EC5C9500360A58 /* ArcGIS.bundle */; };
@@ -52,6 +53,8 @@
 		9704D4B7142AC69A00C7D727 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		97B8C37B1677CBB8003B6E1B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		97D382EC142D3DFF006372FD /* northarrow.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = northarrow.gif; sourceTree = "<group>"; };
+		9DE7BF881916038500422862 /* GroupListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupListViewController.h; sourceTree = "<group>"; };
+		9DE7BF891916038500422862 /* GroupListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupListViewController.m; sourceTree = "<group>"; };
 		C55320D614885972008EA256 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		C55320D714885972008EA256 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		C5F3C642149FEB3A009C00C2 /* bullseye.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bullseye.png; sourceTree = "<group>"; };
@@ -169,6 +172,8 @@
 				28D7ACF70DDB3853001CB0EB /* GpsSketchingSampleViewController.m */,
 				C55320D614885972008EA256 /* SettingsViewController.h */,
 				C55320D714885972008EA256 /* SettingsViewController.m */,
+				9DE7BF881916038500422862 /* GroupListViewController.h */,
+				9DE7BF891916038500422862 /* GroupListViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -245,6 +250,7 @@
 				1D3623260D0F684500981E51 /* GpsSketchingSampleAppDelegate.m in Sources */,
 				28D7ACF80DDB3853001CB0EB /* GpsSketchingSampleViewController.m in Sources */,
 				C55320D914885972008EA256 /* SettingsViewController.m in Sources */,
+				9DE7BF8A1916038500422862 /* GroupListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

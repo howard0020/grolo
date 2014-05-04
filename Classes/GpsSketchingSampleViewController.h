@@ -19,6 +19,6 @@
 @interface GpsSketchingSampleViewController : UIViewController <AGSMapViewLayerDelegate, CLLocationManagerDelegate>
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
-
+@property (nonatomic) NSInteger currentGroupId;
 @end
 
