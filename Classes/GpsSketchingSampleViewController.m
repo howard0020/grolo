@@ -347,10 +347,12 @@
     AGSPoint *point = [self.mapView.locationDisplay mapLocation];
     
     [[self.myLocationRef childByAppendingPath:@"location"] setValue:[point encodeToJSON]];
-    
-    [self.geometryDict setObject:point forKey:self.myID];
-    
-    [self zoomToGroup];
+    if(point) {
+        [self.geometryDict setObject:point forKey:self.myID];
+        
+        [self zoomToGroup];
+    }
+   
 //    
 //    [[self.myLocationRef childByAppendingPath:@"symbol"] setValue:[self.mapView.locationDisplay location]];
 //    
