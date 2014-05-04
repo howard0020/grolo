@@ -37,7 +37,12 @@
 
 @property (nonatomic, strong)Firebase* myLocationRef;
 
+@property (nonatomic) bool loadingCompleted;
+@property (nonatomic, strong) NSMutableDictionary *userIdToGraphicDict;
+
 @property (nonatomic, strong) NSMutableDictionary *geometryDict;
+
+@property (nonatomic, strong) NSString *myID;
 
 //starts the sketching of location updates
 - (IBAction)startGPSSketching:(id)sender;
@@ -58,6 +63,16 @@
 @implementation GpsSketchingSampleViewController
 
 #pragma mark - UIViewController methods
+- (NSString *) myID {
+    return @"1";
+}
+
+- (NSMutableDictionary *) userIdToGraphicDict {
+    if (!_userIdToGraphicDict) {
+        _userIdToGraphicDict = [[NSMutableDictionary alloc]init];
+    }
+    return _userIdToGraphicDict;
+}
 
 // in iOS7 this gets called and hides the status bar so the view does not go under the top iPhone status bar
 - (BOOL)prefersStatusBarHidden
@@ -68,9 +83,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    NSString *url = [@"https://grolo.firebaseio.com/trips/1/users/" stringByAppendingString:self.myID];
+    self.myLocationRef = [[Firebase alloc] initWithUrl:url];
     self.geometryDict = [NSMutableDictionary dictionary];
-    
-    self.myLocationRef = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips/1/users/3"];
     
     //initialize the map URL and the tiled map layer.
 	NSURL *mapUrl = [NSURL URLWithString:kBaseMapURL];
@@ -101,9 +116,57 @@
     [self addObserver:self forKeyPath:kAccuracyValueKeyPath options:NSKeyValueObservingOptionNew context:nil];
     [self addObserver:self forKeyPath:kFrequencyValueKeyPath options:NSKeyValueObservingOptionNew context:nil];
     
-    Firebase* user1 = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips/1/users/1/location"];
+    Firebase* users = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips/1/users"];
+    
+    __weak GpsSketchingSampleViewController *weakSelf = self;
+    [users observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+        NSLog(@"adding new user");
+        NSString *userID = snapshot.name;
+        if ([weakSelf.myID isEqualToString:userID]) {
+            return;
+        }
+        
+        NSDictionary *user = snapshot.value;
+        NSDictionary *userLocation = [user objectForKey:@"location"];
+        AGSPoint* point = [[AGSPoint alloc] init];
+        [point decodeWithJSON: userLocation];
+                
+        AGSGeometry *geometry = point;
+        AGSSymbol *symbol = [weakSelf.mapView.locationDisplay courseSymbol];
+        AGSGraphic *graphic = [AGSGraphic graphicWithGeometry:geometry
+                                                       symbol:symbol
+                                                   attributes:nil];
+        
+        [weakSelf.userIdToGraphicDict setValue:graphic forKey:userID];
+        [weakSelf.gpsSketchLayer addGraphic:graphic];
+    }];
+    
+    [users observeEventType:FEventTypeChildRemoved withBlock:^(FDataSnapshot *snapshot) {
+        NSLog(@"removing user");
+        NSString *userID = snapshot.name;
+        AGSGraphic *graphic = [weakSelf.userIdToGraphicDict valueForKey:userID];
+        [weakSelf.userIdToGraphicDict removeObjectForKey:userID];
+        [weakSelf.gpsSketchLayer removeGraphic:graphic];
+    }];
+    
+    [users observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
+        NSString *userID = snapshot.name;
+        NSLog(@"@updating user: %@", userID);
+        if ([weakSelf.myID isEqualToString:userID]) {
+            return;
+        }
+        
+        NSDictionary *user = snapshot.value;
+        NSDictionary *userLocation = [user objectForKey:@"location"];
+        AGSGraphic *graphic = [weakSelf.userIdToGraphicDict valueForKey:userID];
+        AGSPoint *point = (AGSPoint *) graphic.geometry;
+        [point decodeWithJSON: userLocation];
+        [weakSelf.gpsSketchLayer removeGraphic:graphic];
+        [weakSelf.gpsSketchLayer addGraphic:graphic];
+    }];
+    
+    Firebase* user1 = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips/1/users/3/location"];
     [user1 observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-
         [self.otherUserLayer removeAllGraphics];
         
         AGSPoint* point = [[AGSPoint alloc] init];
@@ -112,15 +175,13 @@
         AGSSymbol *symbol = [self.mapView.locationDisplay courseSymbol];
         
         AGSGraphic *graphic = [AGSGraphic graphicWithGeometry:geometry
-                                                                   symbol:symbol
-                                                               attributes:nil];
+                                                       symbol:symbol
+                                                   attributes:nil];
         
         [self.otherUserLayer addGraphic:graphic];
-        
         [self.geometryDict setObject:geometry forKey:@"1"];
-//        [self zoomToGroup];
+        //        [self zoomToGroup];
     }];
-
 }
 
 - (void)zoomToGroup
@@ -277,6 +338,7 @@
     //add the present gps point to the sketch layer. Notice that we do not have to reproject this point as the mapview's gps object is returing the point in the same spatial reference. 
     //index -1 forces the vertex to be added at the end
     
+//    [self.gpsSketchLayer insertVertex:[self.mapView.locationDisplay mapLocation] inPart:0 atIndex:-1];
     [self.gpsSketchLayer clear];
     
     [self.gpsSketchLayer insertVertex:[self.mapView.locationDisplay mapLocation] inPart:0 atIndex:-1];
