@@ -28,6 +28,7 @@
 
 //the sketch layer used to draw the gps track
 @property (nonatomic, strong) AGSSketchGraphicsLayer *gpsSketchLayer;
+@property (nonatomic, strong) AGSGraphicsLayer *otherUserLayer;
 
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *startStopButton;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *addCurrentLocButton;
@@ -38,6 +39,10 @@
 
 @property (nonatomic) bool loadingCompleted;
 @property (nonatomic, strong) NSMutableDictionary *userIdToGraphicDict;
+
+@property (nonatomic, strong) NSMutableDictionary *geometryDict;
+
+@property (nonatomic, strong) NSString *myID;
 
 //starts the sketching of location updates
 - (IBAction)startGPSSketching:(id)sender;
@@ -58,6 +63,9 @@
 @implementation GpsSketchingSampleViewController
 
 #pragma mark - UIViewController methods
+- (NSString *) myID {
+    return @"1";
+}
 
 - (NSMutableDictionary *) userIdToGraphicDict {
     if (!_userIdToGraphicDict) {
@@ -75,7 +83,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.myLocationRef = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips/1/users/1"];
+    NSString *url = [@"https://grolo.firebaseio.com/trips/1/users/" stringByAppendingString:self.myID];
+    self.myLocationRef = [[Firebase alloc] initWithUrl:url];
+    self.geometryDict = [NSMutableDictionary dictionary];
     
     //initialize the map URL and the tiled map layer.
 	NSURL *mapUrl = [NSURL URLWithString:kBaseMapURL];
@@ -89,7 +99,10 @@
     
     //preparing the gps sketch layer. 
     self.gpsSketchLayer = [[AGSSketchGraphicsLayer alloc] initWithGeometry:nil];
+    self.otherUserLayer = [[AGSGraphicsLayer alloc] init];
+    
 	[self.mapView addMapLayer:self.gpsSketchLayer withName:@"Sketch layer"];
+    [self.mapView addMapLayer:self.otherUserLayer withName:@"Other Layer"];
     
     //this button is enabled only when the trackin has started. 
     self.addCurrentLocButton.enabled = NO;
@@ -102,9 +115,6 @@
     //observe for changes in the parameters/settings
     [self addObserver:self forKeyPath:kAccuracyValueKeyPath options:NSKeyValueObservingOptionNew context:nil];
     [self addObserver:self forKeyPath:kFrequencyValueKeyPath options:NSKeyValueObservingOptionNew context:nil];
-    
-//    Firebase* user1 = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips/1/users/1/location"];
-    self.loadingCompleted = false;
     
     Firebase* users = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips/1/users"];
     
@@ -120,8 +130,9 @@
         AGSGeometry *geometry = point;
         AGSSymbol *symbol = [weakSelf.mapView.locationDisplay courseSymbol];
         AGSGraphic *graphic = [AGSGraphic graphicWithGeometry:geometry
-                                                            symbol:symbol
-                                                            attributes:nil];
+                                                       symbol:symbol
+                                                   attributes:nil];
+        
         [weakSelf.userIdToGraphicDict setValue:graphic forKey:userID];
         [weakSelf.gpsSketchLayer addGraphic:graphic];
     }];
@@ -133,6 +144,7 @@
         [weakSelf.userIdToGraphicDict removeObjectForKey:userID];
         [weakSelf.gpsSketchLayer removeGraphic:graphic];
     }];
+    
     [users observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
         NSString *userID = snapshot.name;
         NSLog(@"@updating user: %@", userID);
@@ -146,6 +158,29 @@
         [weakSelf.gpsSketchLayer addGraphic:graphic];
     }];
     
+    Firebase* user1 = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips/1/users/3/location"];
+    [user1 observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        [self.otherUserLayer removeAllGraphics];
+        
+        AGSPoint* point = [[AGSPoint alloc] init];
+        [point decodeWithJSON:snapshot.value];
+        AGSGeometry *geometry = point;
+        AGSSymbol *symbol = [self.mapView.locationDisplay courseSymbol];
+        
+        AGSGraphic *graphic = [AGSGraphic graphicWithGeometry:geometry
+                                                       symbol:symbol
+                                                   attributes:nil];
+        
+        [self.otherUserLayer addGraphic:graphic];
+        [self.geometryDict setObject:geometry forKey:@"1"];
+        //        [self zoomToGroup];
+    }];
+}
+
+- (void)zoomToGroup
+{
+    AGSGeometry *unionGeometry = [[AGSGeometryEngine defaultGeometryEngine] unionGeometries:self.geometryDict.allValues];
+    [self.mapView zoomToGeometry:unionGeometry withPadding:100.0f animated:YES];
 }
 
 - (AGSCompositeSymbol*)greenSymbolWithNumber:(NSInteger)stopNumber {
@@ -288,6 +323,8 @@
  *      accuracy, or both together.
  */
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
+    
+    
     // test that the horizontal accuracy does not indicate an invalid measurement
     if (newLocation.horizontalAccuracy < 0) return;    
     
@@ -295,9 +332,18 @@
     //index -1 forces the vertex to be added at the end
     
 //    [self.gpsSketchLayer insertVertex:[self.mapView.locationDisplay mapLocation] inPart:0 atIndex:-1];
+    [self.gpsSketchLayer clear];
+    
+    [self.gpsSketchLayer insertVertex:[self.mapView.locationDisplay mapLocation] inPart:0 atIndex:-1];
 
 //    NSLog(@"%@",[self.mapView.locationDisplay mapLocation]);
-    [[self.myLocationRef childByAppendingPath:@"location"] setValue:[[self.mapView.locationDisplay mapLocation] encodeToJSON]];
+    AGSPoint *point = [self.mapView.locationDisplay mapLocation];
+    
+    [[self.myLocationRef childByAppendingPath:@"location"] setValue:[point encodeToJSON]];
+    
+    [self.geometryDict setObject:point forKey:@"3"];
+    
+    [self zoomToGroup];
 //    
 //    [[self.myLocationRef childByAppendingPath:@"symbol"] setValue:[self.mapView.locationDisplay location]];
 //    
