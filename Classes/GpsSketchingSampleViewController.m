@@ -13,6 +13,7 @@
 #import "GpsSketchingSampleViewController.h"
 #import <CoreLocation/CoreLocation.h>
 #import "Parameters.h"
+#import "GLFirebaseRef.h"
 
 //base map rest url
 #define kBaseMapURL @"http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"
@@ -64,11 +65,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.myLocationRef = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/users/2"];
+    self.myLocationRef = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips/1/users/2"];
     
-    
-	
-    //initialize the map URL and the tiled map layer. 
+    //initialize the map URL and the tiled map layer.
 	NSURL *mapUrl = [NSURL URLWithString:kBaseMapURL];
 	AGSTiledMapServiceLayer *tiledLyr = [AGSTiledMapServiceLayer tiledMapServiceLayerWithURL:mapUrl];
     
@@ -93,6 +92,41 @@
     //observe for changes in the parameters/settings
     [self addObserver:self forKeyPath:kAccuracyValueKeyPath options:NSKeyValueObservingOptionNew context:nil];
     [self addObserver:self forKeyPath:kFrequencyValueKeyPath options:NSKeyValueObservingOptionNew context:nil];
+    
+    Firebase* user1 = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips/1/users/1/location"];
+    [user1 observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+
+        AGSPoint* point = [[AGSPoint alloc] init];
+        [point decodeWithJSON:snapshot.value];
+        AGSGeometry *geometry = point;
+        AGSSymbol *symbol = [self greenSymbolWithNumber:0];
+        AGSStopGraphic *stopGraphic = [AGSStopGraphic graphicWithGeometry:geometry
+                                                                   symbol:symbol
+                                                               attributes:nil];
+        
+        [self.gpsSketchLayer addGraphic:stopGraphic];
+    }];
+
+}
+
+- (AGSCompositeSymbol*)greenSymbolWithNumber:(NSInteger)stopNumber {
+	AGSCompositeSymbol *cs = [AGSCompositeSymbol compositeSymbol];
+	
+    // create outline
+	AGSSimpleLineSymbol *sls = [AGSSimpleLineSymbol simpleLineSymbol];
+	sls.color = [UIColor blackColor];
+	sls.width = 1;
+	sls.style = AGSSimpleLineSymbolStyleSolid;
+	
+    // create main circle
+	AGSSimpleMarkerSymbol *sms = [AGSSimpleMarkerSymbol simpleMarkerSymbol];
+	sms.color = [UIColor greenColor];
+	sms.outline = sls;
+	sms.size = CGSizeMake(10, 10);
+	sms.style = AGSSimpleMarkerSymbolStyleCircle;
+	[cs addSymbol:sms];
+	
+	return cs;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -223,7 +257,7 @@
     
     [self.gpsSketchLayer insertVertex:[self.mapView.locationDisplay mapLocation] inPart:0 atIndex:-1];
 
-    NSLog(@"%@",[self.mapView.locationDisplay mapLocation]);
+//    NSLog(@"%@",[self.mapView.locationDisplay mapLocation]);
     [[self.myLocationRef childByAppendingPath:@"location"] setValue:[[self.mapView.locationDisplay mapLocation] encodeToJSON]];
 }
 
