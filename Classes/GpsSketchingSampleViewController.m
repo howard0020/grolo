@@ -178,6 +178,8 @@
         
         [self.geometryDict setObject:geometry forKey:userID];
         
+        [self zoomToGroup];
+        
         [self setDistance];
     }];
     
@@ -243,7 +245,7 @@
     if (self.lock)
     {
         AGSGeometry *unionGeometry = [[AGSGeometryEngine defaultGeometryEngine] unionGeometries:self.geometryDict.allValues];
-        [self.mapView zoomToGeometry:unionGeometry withPadding:100.0f animated:YES];
+        [self.mapView zoomToGeometry:unionGeometry withPadding:120.0f animated:YES];
     }
 }
 
