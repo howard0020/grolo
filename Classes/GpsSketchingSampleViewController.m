@@ -220,11 +220,11 @@
     
     //add the present gps point to the sketch layer. Notice that we do not have to reproject this point as the mapview's gps object is returing the point in the same spatial reference. 
     //index -1 forces the vertex to be added at the end
+    
     [self.gpsSketchLayer insertVertex:[self.mapView.locationDisplay mapLocation] inPart:0 atIndex:-1];
+
     NSLog(@"%@",[self.mapView.locationDisplay mapLocation]);
-    double x = [[self.mapView.locationDisplay mapLocation] x];
-    double y = [[self.mapView.locationDisplay mapLocation] x];
-    [[self.myLocationRef childByAppendingPath:@"location"] setValue:@{@"x": @(x), @"y": @(y)}];
+    [[self.myLocationRef childByAppendingPath:@"location"] setValue:[[self.mapView.locationDisplay mapLocation] encodeToJSON]];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
