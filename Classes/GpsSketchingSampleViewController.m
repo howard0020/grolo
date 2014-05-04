@@ -99,12 +99,12 @@
         AGSPoint* point = [[AGSPoint alloc] init];
         [point decodeWithJSON:snapshot.value];
         AGSGeometry *geometry = point;
-        AGSSymbol *symbol = [self greenSymbolWithNumber:0];
-        AGSStopGraphic *stopGraphic = [AGSStopGraphic graphicWithGeometry:geometry
+        AGSSymbol *symbol = [self.mapView.locationDisplay courseSymbol];
+        AGSGraphic *graphic = [AGSGraphic graphicWithGeometry:geometry
                                                                    symbol:symbol
                                                                attributes:nil];
         
-        [self.gpsSketchLayer addGraphic:stopGraphic];
+        [self.gpsSketchLayer addGraphic:graphic];
     }];
 
 }
@@ -259,6 +259,10 @@
 
 //    NSLog(@"%@",[self.mapView.locationDisplay mapLocation]);
     [[self.myLocationRef childByAppendingPath:@"location"] setValue:[[self.mapView.locationDisplay mapLocation] encodeToJSON]];
+//    
+//    [[self.myLocationRef childByAppendingPath:@"symbol"] setValue:[self.mapView.locationDisplay location]];
+//    
+//    NSLog(@"%@",[self.mapView.locationDisplay courseSymbol]);
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
