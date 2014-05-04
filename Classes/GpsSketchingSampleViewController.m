@@ -83,7 +83,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSString *url = [@"https://grolo.firebaseio.com/trips/1/users/" stringByAppendingString:self.myID];
+    NSString *url = [NSString stringWithFormat:@"https://grolo.firebaseio.com/trips/%d/users/%@", self.currentGroupId, self.myID];
     self.myLocationRef = [[Firebase alloc] initWithUrl:url];
     self.geometryDict = [NSMutableDictionary dictionary];
     
@@ -166,24 +166,7 @@
         [weakSelf.otherUserLayer removeGraphic:graphic];
         [weakSelf.otherUserLayer addGraphic:graphic];
     }];
-    
-//    Firebase* user1 = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips/1/users/3/location"];
-//    [user1 observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-//        [self.otherUserLayer removeAllGraphics];
-//        
-//        AGSPoint* point = [[AGSPoint alloc] init];
-//        [point decodeWithJSON:snapshot.value];
-//        AGSGeometry *geometry = point;
-//        AGSSymbol *symbol = [self.mapView.locationDisplay courseSymbol];
-//        
-//        AGSGraphic *graphic = [AGSGraphic graphicWithGeometry:geometry
-//                                                       symbol:symbol
-//                                                   attributes:nil];
-//        
-//        [self.otherUserLayer addGraphic:graphic];
-//        [self.geometryDict setObject:geometry forKey:@"1"];
-//        //        [self zoomToGroup];
-//    }];
+
 }
 
 - (void)zoomToGroup
@@ -260,6 +243,8 @@
     
     //set the midvertex symbol to nil to avoid the default circle symbol appearing in between vertices
     self.gpsSketchLayer.midVertexSymbol = nil;
+    
+    [self startGPSSketching:nil];
 }
 
 #pragma mark - Action methods
