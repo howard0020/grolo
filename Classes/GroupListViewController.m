@@ -16,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic) NSInteger currentSelectedIndex;
 @property (nonatomic) NSString* currentSelectedName;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *addButton;
+
 @end
 
 @implementation GroupListViewController
@@ -43,6 +45,22 @@
         self.groupList = snapshot.value;
         [self.tableView reloadData];
     }];
+}
+
+- (IBAction)addGroup:(id)sender
+{
+    NSLog(@"add group");
+    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Hello!" message:@"Please enter a group name:" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    UITextField * alertTextField = [alert textFieldAtIndex:0];
+    alertTextField.placeholder = @"Enter group name";
+    [alert show];
+
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    NSLog(@"Entered: %@",[[alertView textFieldAtIndex:0] text]);
+    Firebase *groupBase = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips"];
+    [[groupBase childByAppendingPath:[NSString stringWithFormat:@"%d" , self.groupList.count]] setValue:@{@"name": [[alertView textFieldAtIndex:0] text]}];
 }
 
 
