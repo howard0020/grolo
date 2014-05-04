@@ -15,6 +15,7 @@
 @property (nonatomic, strong) NSMutableArray *groupList;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic) NSInteger currentSelectedIndex;
+@property (nonatomic) NSString* currentSelectedName;
 @end
 
 @implementation GroupListViewController
@@ -76,7 +77,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     self.currentSelectedIndex = indexPath.row;
+    NSDictionary *dict = [self.groupList objectAtIndex:indexPath.row];
     
+    self.currentSelectedName = [dict objectForKey:@"name"];
+
     [self performSegueWithIdentifier:@"group" sender:self];
 }
 
@@ -86,6 +90,7 @@
     {
         GpsSketchingSampleViewController *vc = segue.destinationViewController;
         vc.currentGroupId = self.currentSelectedIndex;
+        vc.currentGroupName = self.currentSelectedName;
     }
 }
 

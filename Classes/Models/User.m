@@ -11,7 +11,7 @@
 @implementation User
 
 + (NSString *) currentUserID {
-    return @"1";
+    return @"2";
 }
 
 @end
