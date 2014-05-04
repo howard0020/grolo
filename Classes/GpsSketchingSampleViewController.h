@@ -20,5 +20,6 @@
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic) NSInteger currentGroupId;
+@property (nonatomic) NSString* currentGroupName;
 @end
 

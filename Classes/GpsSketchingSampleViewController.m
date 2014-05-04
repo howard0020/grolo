@@ -96,7 +96,7 @@
     NSString *url = [NSString stringWithFormat:@"https://grolo.firebaseio.com/trips/%d/users/%@", self.currentGroupId, self.myID];
     self.myLocationRef = [[Firebase alloc] initWithUrl:url];
     self.geometryDict = [NSMutableDictionary dictionary];
-    
+    self.title = self.currentGroupName;
     //initialize the map URL and the tiled map layer.
 	NSURL *mapUrl = [NSURL URLWithString:kBaseMapURL];
 	AGSTiledMapServiceLayer *tiledLyr = [AGSTiledMapServiceLayer tiledMapServiceLayerWithURL:mapUrl];
