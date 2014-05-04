@@ -142,7 +142,7 @@
         [point decodeWithJSON: userLocation];
                 
         AGSGeometry *geometry = point;
-        AGSSymbol *symbol = [weakSelf.mapView.locationDisplay courseSymbol];
+        AGSSymbol *symbol = [weakSelf.mapView.locationDisplay defaultSymbol];
         AGSGraphic *graphic = [AGSGraphic graphicWithGeometry:geometry
                                                        symbol:symbol
                                                    attributes:nil];
