@@ -185,7 +185,11 @@
 {
     self.lock = !self.lock;
     self.lockButton.title = self.lock? @"Unlock" : @"Lock";
-    if (!self.lock)
+    if (self.lock)
+    {
+        [self zoomToGroup];
+    }
+    else
     {
         [self showCurrentLocation];
     }
