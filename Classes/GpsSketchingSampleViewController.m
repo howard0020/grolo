@@ -122,6 +122,10 @@
     [users observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
         NSLog(@"adding new user");
         NSString *userID = snapshot.name;
+        if ([weakSelf.myID isEqualToString:userID]) {
+            return;
+        }
+        
         NSDictionary *user = snapshot.value;
         NSDictionary *userLocation = [user objectForKey:@"location"];
         AGSPoint* point = [[AGSPoint alloc] init];
@@ -148,6 +152,9 @@
     [users observeEventType:FEventTypeChildChanged withBlock:^(FDataSnapshot *snapshot) {
         NSString *userID = snapshot.name;
         NSLog(@"@updating user: %@", userID);
+        if ([weakSelf.myID isEqualToString:userID]) {
+            return;
+        }
         
         NSDictionary *user = snapshot.value;
         NSDictionary *userLocation = [user objectForKey:@"location"];
