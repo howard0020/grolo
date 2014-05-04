@@ -16,7 +16,7 @@
 #import "SettingsViewController.h"
 #import <Firebase/Firebase.h>
 
-@interface GpsSketchingSampleViewController : UIViewController <AGSMapViewLayerDelegate, CLLocationManagerDelegate>
+@interface GpsSketchingSampleViewController : UIViewController <AGSMapViewLayerDelegate, CLLocationManagerDelegate, AGSWebMapDelegate>
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic) NSInteger currentGroupId;

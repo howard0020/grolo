@@ -20,11 +20,14 @@
 #define kSettingsSegueIdentifier @"SettingsViewSegue"
 #define kAccuracyValueKeyPath @"self.parameters.accuracyValue"
 #define kFrequencyValueKeyPath @"self.parameters.frequencyValue"
+#define kWebmapID @"6a0e1ce340da4f9f89491a4ace34f61c";
+
 
 @interface GpsSketchingSampleViewController()
 
 //the map view
 @property (nonatomic, strong) IBOutlet AGSMapView *mapView;
+@property (nonatomic, strong) AGSWebMap *webMap;
 
 //the sketch layer used to draw the gps track
 @property (nonatomic, strong) AGSSketchGraphicsLayer *gpsSketchLayer;
@@ -92,6 +95,11 @@
     NSString *url = [NSString stringWithFormat:@"https://grolo.firebaseio.com/trips/%d/users/%@", self.currentGroupId, self.myID];
     self.myLocationRef = [[Firebase alloc] initWithUrl:url];
     self.geometryDict = [NSMutableDictionary dictionary];
+    
+    
+//    self.webMap = [AGSWebMap webMapWithItemId:kWebmapID credential:nil];
+//    [self.webMap openIntoMapView:self.mapView];
+//    self.webMap.delegate = self;
     
     //initialize the map URL and the tiled map layer.
 	NSURL *mapUrl = [NSURL URLWithString:kBaseMapURL];
