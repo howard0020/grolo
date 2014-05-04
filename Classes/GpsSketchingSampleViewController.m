@@ -14,6 +14,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "Parameters.h"
 #import "GLFirebaseRef.h"
+#import "User.h"
 
 //base map rest url
 #define kBaseMapURL @"http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"
@@ -64,7 +65,7 @@
 
 #pragma mark - UIViewController methods
 - (NSString *) myID {
-    return @"2";
+    return [User currentUserID];
 }
 
 - (NSMutableDictionary *) userIdToGraphicDict {
@@ -326,9 +327,9 @@
     //index -1 forces the vertex to be added at the end
     
 //    [self.gpsSketchLayer insertVertex:[self.mapView.locationDisplay mapLocation] inPart:0 atIndex:-1];
-    [self.gpsSketchLayer clear];
+//    [self.gpsSketchLayer clear];
     
-    [self.gpsSketchLayer insertVertex:[self.mapView.locationDisplay mapLocation] inPart:0 atIndex:-1];
+//    [self.gpsSketchLayer insertVertex:[self.mapView.locationDisplay mapLocation] inPart:0 atIndex:-1];
 
 //    NSLog(@"%@",[self.mapView.locationDisplay mapLocation]);
     AGSPoint *point = [self.mapView.locationDisplay mapLocation];

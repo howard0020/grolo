@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		04A20BA41915D64300E50BE2 /* GLFirebaseRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A20BA31915D64300E50BE2 /* GLFirebaseRef.m */; };
+		04A20BA7191619BA00E50BE2 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A20BA6191619BA00E50BE2 /* User.m */; };
 		1D3623260D0F684500981E51 /* GpsSketchingSampleAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* GpsSketchingSampleAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		28D7ACF80DDB3853001CB0EB /* GpsSketchingSampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* GpsSketchingSampleViewController.m */; };
@@ -32,6 +33,8 @@
 /* Begin PBXFileReference section */
 		04A20BA21915D64300E50BE2 /* GLFirebaseRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLFirebaseRef.h; path = Firebase/GLFirebaseRef.h; sourceTree = "<group>"; };
 		04A20BA31915D64300E50BE2 /* GLFirebaseRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GLFirebaseRef.m; path = Firebase/GLFirebaseRef.m; sourceTree = "<group>"; };
+		04A20BA5191619BA00E50BE2 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = Models/User.h; sourceTree = "<group>"; };
+		04A20BA6191619BA00E50BE2 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = Models/User.m; sourceTree = "<group>"; };
 		1D3623240D0F684500981E51 /* GpsSketchingSampleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GpsSketchingSampleAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* GpsSketchingSampleAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GpsSketchingSampleAppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* GpsSketchingSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GpsSketchingSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -161,6 +164,8 @@
 			children = (
 				3EE6BBEC18E0ACD20092054A /* Parameters.h */,
 				3EE6BBED18E0ACD20092054A /* Parameters.m */,
+				04A20BA5191619BA00E50BE2 /* User.h */,
+				04A20BA6191619BA00E50BE2 /* User.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -244,6 +249,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04A20BA7191619BA00E50BE2 /* User.m in Sources */,
 				3EE6BBEE18E0ACD20092054A /* Parameters.m in Sources */,
 				04A20BA41915D64300E50BE2 /* GLFirebaseRef.m in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
