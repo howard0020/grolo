@@ -116,7 +116,7 @@
     [self addObserver:self forKeyPath:kAccuracyValueKeyPath options:NSKeyValueObservingOptionNew context:nil];
     [self addObserver:self forKeyPath:kFrequencyValueKeyPath options:NSKeyValueObservingOptionNew context:nil];
     
-    Firebase* users = [[Firebase alloc] initWithUrl:@"https://grolo.firebaseio.com/trips/1/users"];
+    Firebase* users = [[Firebase alloc] initWithUrl: [NSString stringWithFormat:@"https://grolo.firebaseio.com/trips/%d/users", self.currentGroupId]];
     
     __weak GpsSketchingSampleViewController *weakSelf = self;
     [users observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
